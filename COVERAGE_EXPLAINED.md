@@ -111,6 +111,34 @@ When you see a coverage value in this benchmark (e.g., 88.8% for GP):
 
 This makes lower coverage values (e.g., 85-90%) still represent good performance, especially if coverage is maintained across all regions including extrapolation.
 
+## What About Other Metrics (RMSE, R²)?
+
+**All metrics are computed on the same evaluation set as coverage.**
+
+This means:
+- **RMSE** (Root Mean Squared Error): Includes prediction errors in extrapolation regions
+- **R²** (Coefficient of Determination): Measures variance explained across entire domain including extrapolation
+- **Mean Width**: Average uncertainty interval width across all regions
+
+### Interpreting R²
+
+Traditional R² interpretation:
+- R² = 0.99: Excellent fit (99% of variance explained)
+- R² = 0.95: Good fit
+- R² = 0.90: Acceptable fit
+
+**In this benchmark**, these values are MORE impressive because they include extrapolation:
+- R² = 0.95 here means the model maintains accuracy even in extrapolation
+- Lower R² values (e.g., 0.85-0.90) are still good if the model predicts well in interpolation but struggles with extrapolation
+
+### Design Note
+
+Computing R² over extrapolation is somewhat non-standard:
+- **Pro**: Consistent with coverage, tests full model capability
+- **Con**: Extrapolation errors can dominate the metric
+
+For scientific applications where extrapolation is common, this approach provides a realistic assessment of model utility.
+
 ## Recommendations for Interpretation
 
 **Good Coverage (90-97%)**: Method maintains calibration across interpolation and extrapolation

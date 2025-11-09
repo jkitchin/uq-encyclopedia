@@ -386,12 +386,16 @@ Point prediction accuracy:
 \text{RMSE} = \sqrt{\frac{1}{N_{\text{test}}} \sum_{i=1}^{N_{\text{test}}} (y_i - \hat{y}_i)^2}
 \end{equation}
 
+Like coverage, RMSE is computed over all spatial regions including extrapolation, providing a comprehensive measure of prediction accuracy both within and beyond the training data range.
+
 *** Coefficient of Determination (R²)
 
 Proportion of variance explained:
 \begin{equation}
 R^2 = 1 - \frac{\sum_{i=1}^{N_{\text{test}}} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{N_{\text{test}}} (y_i - \bar{y})^2}
 \end{equation}
+
+*Important:* R² is also computed over the entire evaluation set including extrapolation regions. While computing R² over extrapolation is somewhat non-standard (R² was primarily designed for in-distribution evaluation), this choice maintains consistency with the coverage metric and provides a realistic assessment of model performance for scientific applications where extrapolation is common. High R² values (e.g., >0.95) in this benchmark indicate the model maintains accuracy even when predicting beyond the training data range.
 
 ** Software and Reproducibility
 
