@@ -265,12 +265,33 @@ For each dataset and noise model combination, we evaluated four noise levels:
 
 This yielded $7 \times 2 \times 4 = 56$ experimental configurations per method.
 
-*** Data Splitting
+*** Data Splitting and Evaluation Strategy
 
-For each configuration, we used:
-- Training set: 80 samples (80%)
-- Test set: 20 samples (20%)
-- Gap region: Additional 50 samples from undersampled region for extrapolation assessment
+To rigorously test UQ methods across different prediction scenarios, we created a spatially structured data split that includes both interpolation and extrapolation challenges.
+
+*Spatial Regions (for domain [0, 1]):*
+
+Each dataset was divided into five distinct regions:
+
+1. *Extrapolation Low* (0.0 - 0.125, 12.5%): Points OUTSIDE the lower training bound
+2. *Training Low* (0.125 - 0.375, 25%): Training data sampled here
+3. *Gap Region* (0.375 - 0.625, 25%): INSIDE training bounds but NO training points (interpolation test)
+4. *Training High* (0.625 - 0.875, 25%): Training data sampled here
+5. *Extrapolation High* (0.875 - 1.0, 12.5%): Points OUTSIDE the upper training bound
+
+*Training Set:* $N=100$ samples randomly drawn from Training Low and Training High regions only (excludes gap and extrapolation regions).
+
+*Test Set:* $N_{\text{test}}=500$ points uniformly distributed across the ENTIRE domain [0, 1], including all five regions.
+
+*Critical Note on Coverage Evaluation:* The reported coverage metrics include evaluation points from ALL regions, specifically:
+- Extrapolation regions (~25% of test points): Beyond training data bounds
+- Gap region (~25% of test points): Interpolation with no nearby training data
+- Training regions (~50% of test points): Near training data
+
+This design tests whether UQ methods can:
+(1) Accurately quantify uncertainty when interpolating in data-sparse regions (gap)
+(2) Appropriately increase uncertainty when extrapolating beyond training bounds
+(3) Maintain calibration across varying distances from training data
 
 All experiments used deterministic random seeds derived from a hash of the configuration name to ensure reproducibility.
 
@@ -338,10 +359,16 @@ Empirical coverage of 95% prediction intervals:
 \text{Coverage} = \frac{1}{N_{\text{test}}} \sum_{i=1}^{N_{\text{test}}} \mathbb{1}[y_i^{\text{lower}} \leq y_i \leq y_i^{\text{upper}}]
 \end{equation}
 
+where the test set includes points from all spatial regions (training, gap, and extrapolation) as described in Section 2.1.3.
+
+*Important:* Unlike many benchmarks that only evaluate on interpolation, our coverage metric includes both interpolation (gap region) and extrapolation regions. This makes it a more stringent test of UQ calibration, as methods must maintain uncertainty estimates both within and beyond the training data range.
+
 Well-calibrated methods should achieve coverage $\approx$ 0.95. We defined calibration quality as:
 - *Well-calibrated*: 0.93 ≤ Coverage ≤ 0.97
 - *Acceptable*: 0.90 ≤ Coverage < 0.93 or 0.97 < Coverage ≤ 0.99
 - *Poor*: Coverage < 0.90 or Coverage > 0.99
+
+Note that achieving 95% coverage across both interpolation AND extrapolation is significantly more challenging than traditional interpolation-only benchmarks.
 
 *** Mean Interval Width
 
