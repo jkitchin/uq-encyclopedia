@@ -47,9 +47,8 @@ venv.bak/
 data/generated/
 data/processed/
 
-# Results (can be regenerated)
-results/
-reports/dashboard/
+# Results (now tracked with Git LFS for dashboard)
+# Note: Large HTML visualizations are managed with Git LFS
 
 # Testing
 .pytest_cache/
