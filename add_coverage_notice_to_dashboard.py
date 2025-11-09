@@ -28,8 +28,8 @@ coverage_notice = '''
 
 print("Adding coverage notice to dashboard tabs...")
 
-# Add to Data-Driven UQ tab (after the header)
-dd_pattern = r'(<div id="datadriven" class="tabcontent">.*?<h2>Data-Driven UQ Benchmark Results</h2>)'
+# Add to Data-Driven UQ tab (after the h1 header)
+dd_pattern = r'(<div id="datadriven-uq" class="tabcontent">.*?<h1>.*?Data-Driven UQ.*?</h1>)'
 dd_match = re.search(dd_pattern, html, re.DOTALL)
 if dd_match:
     insert_pos = dd_match.end()
@@ -37,6 +37,26 @@ if dd_match:
     print("✓ Added to Data-Driven UQ tab")
 else:
     print("✗ Could not find Data-Driven UQ tab")
+
+# Also add to Linear Models tab
+linear_pattern = r'(<div id="linear-models" class="tabcontent">.*?<h1>.*?Linear Models.*?</h1>)'
+linear_match = re.search(linear_pattern, html, re.DOTALL)
+if linear_match:
+    insert_pos = linear_match.end()
+    html = html[:insert_pos] + coverage_notice + html[insert_pos:]
+    print("✓ Added to Linear Models tab")
+else:
+    print("✗ Could not find Linear Models tab")
+
+# Also add to Nonlinear Models tab
+nonlinear_pattern = r'(<div id="nonlinear-models" class="tabcontent">.*?<h1>.*?Nonlinear Models.*?</h1>)'
+nonlinear_match = re.search(nonlinear_pattern, html, re.DOTALL)
+if nonlinear_match:
+    insert_pos = nonlinear_match.end()
+    html = html[:insert_pos] + coverage_notice + html[insert_pos:]
+    print("✓ Added to Nonlinear Models tab")
+else:
+    print("✗ Could not find Nonlinear Models tab")
 
 # Save the updated dashboard
 with open(dashboard_path, 'w', encoding='utf-8') as f:
