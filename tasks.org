@@ -1,0 +1,7 @@
+
+* issues
+
+- [X] the notebooks directory needs to be filled in
+- [ ] need a better launch page
+- [ ] nonlinear model plots
+- [ ] make each tab similar

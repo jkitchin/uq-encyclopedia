@@ -1,0 +1,41 @@
+# Core scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Machine learning
+scikit-learn>=1.3.0
+
+# Uncertainty quantification
+mapie>=0.8.0  # Conformal prediction
+pycse>=2.1.0  # Regression with prediction intervals
+
+# Data formats
+h5py>=3.8.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# Progress bars
+tqdm>=4.65.0
+
+# Jupyter support
+jupyter>=1.0.0
+notebook>=6.5.0
+ipywidgets>=8.0.0
+
+# Optional: Deep learning (for DPOSE, NNBR)
+# torch>=2.0.0
+# scikit-learn-extra>=0.3.0
+
+# Development and testing
+pytest>=7.3.0
+pytest-cov>=4.1.0
+black>=23.3.0
+flake8>=6.0.0
+
+# Documentation
+sphinx>=6.2.0
+sphinx-rtd-theme>=1.2.0

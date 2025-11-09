@@ -1,0 +1,84 @@
+#+title: UQ encyclopedia
+#+author: John Kitchin
+
+* About this project
+
+This project is an exploration of using Claude Code for a "largish" research related project on uncertainty quantification. The whole project is "vibe-engineered" based on the initial specification below. That means I used natural language prompts to guide the generation of the digital artifacts here (the code, html, and narrative text).
+
+This document and the specification were written by me. The whole project took place in stages (which were not especially well captured aside from the final artifact). I used a brainstorming skill initially to expand and fill out the scope, then a planning skill, and then began stepwise implementations. The whole thing took about 12 hours over two days.
+
+I want to be transparent about the role of AI in this work: Practically all of the technical work in artifact (code, html, even the manuscript) was done with AI through an integrated, iterative process where I reviewed what was created and requested changes. The project is large enough that I was not able to review every single line and result though. It remains to be seen if this work is useful, or if it seems like more work to verify than doing it yourself. I hope it at least provides insight and inspiration for what can go wrong with UQ, and how it works in practice.
+
+** Things I learned along the way
+
+I spent the most time on the linear models, figuring I wanted to get this mostly right, and then apply lessons learned to the subsequent sections.
+
+I spent a lot of time fiddling with the web dashboard. This was a little annoying as fixing one thing often undid something else, and as it got larger, it got more and more difficult to be precise about what issue to fix.
+
+Mission / feature creep occurred. Along the way I decided I wanted the web dashboard for ease of interaction, and then a manuscript to go with it.
+
+I have residual fear / discomfort about the results. I am not sure I can audit them directly, or directly verify each one from code that was executed. That leaves me with a sense that some of them could be "generated" rather than computed, and if they were just generated they are not correct. I have seen this happen before, and while I cannot prove it happened here, I also cannot say it did not happen.
+
+The project became somewhat a garden that turned to a hard to maintain forest. A year ago, this would have been a several month long project for me, and this weekend it happened in 12ish hours. That is too fast to internalize everything, and have a deep mental model of how the work was done. I focused on whether the results made sense, and less on specific details of how it was done. There is still a lot to do on that front now that there are results to explore.
+
+There is clearly a lot more that can be done, but this work already feels unwieldy. For example, there is nothing on bootstrapping here, or how anything depends on number of samples, etc.
+
+** Things I wish I did differently
+
+I wish I had been more intentional about version control. There is no history to go back through, and Claude Code instead made many files like .bak along the way.
+
+I sort of wish I had taken more time, and spread this out over several weeks at about an hour at a time. This would give me more time to reflect, review, etc. A project like this requires more planning and review before you start. Still, perhaps I should simply view it as the first iteration, and there needs to be a subsequent iteration that starts from scratch. It was only 12 hours after all. That is an investment I am happy to learn from, scrap, and try again.
+
+
+* Initial specification
+
+** Description
+
+I want a comprehensive project that explores uncertainty quantification in practice. The goal is to evaluate UQ approaches in practice, e.g. with limited data, to test in "interpolation" and extrapolation. Where possible, we will compare results to theoretical expectations.
+
+This will be a lot of work, and we need to take extra care to organize it so it is accessible. First, lets brainstorm what the overall project structure will look like so we have a complete specification for each effort.
+
+I would like to develop a benchmark framework for future work that could leverage the datasets, and produce a common set of metrics for new models, or UQ approaches.
+
+** Linear models
+
+Create a series of linear datasets some examples are:
+
+- a line
+- a polynomial
+- A Lennard-Jones function
+- A Shomate polynomial
+
+The data sets should have a gap (e.g. interpolation). Each dataset will have ~1500 data samples. We should pre-scale the data so that they all fall in the range of 0..1.
+
+with different noise models: homoskedastic and heteroskedastic and noise levels: 1%, 2%, 5% and 10%.
+
+We use a conventional hat method for UQ (pycse.regress), a Bayesian linear regressor (sklearn) and conformal prediction (via MAPIE) for UQ.
+
+The fits will use several sample sizes for a learning curve kind of analysis.
+
+We will also use a bootstrapping analysis to fit each model enough times to get actual statistics.
+
+** Nonlinear models
+
+We will create nonlinear data sets:
+- an exponential like Arrhenius
+- Morse potential
+- Gaussian data
+
+For the UQ models, we will use a delta method, conformal prediction, and if it is feasible a bayesian model.
+
+
+** Data-driven models
+
+- a discontinuity / sharp sigmoid
+
+
+For the models:
+
+1. A Gaussian Process (with different kernels)
+2. DPOSE
+3. NNBR
+4. Random Forest
+
+For UQ here we rely on the sklearn return_std functionality, and conformal prediction.
